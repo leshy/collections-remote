@@ -8,7 +8,7 @@ CollectionExposerHttp = exports.CollectionExposerHttp = Backbone.Model.extend400
         app = @get 'app'
         c = @get 'collection'
         name = c.get 'name'
-        
+
         callbackToRes = (res) -> (err,data) ->
             console.log 'res',err,data
             res.end JSON.stringify err: err, data: data
@@ -25,4 +25,3 @@ CollectionExposerHttp = exports.CollectionExposerHttp = Backbone.Model.extend400
 
         app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) ->
             res.end JSON.stringify err: err, data: data
-

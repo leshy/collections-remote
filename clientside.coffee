@@ -50,3 +50,4 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         reply.read (msg) -> if msg then helpers.cbc callback, msg.err, msg.data;
 
 ###
+
