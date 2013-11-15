@@ -1,5 +1,6 @@
 helpers = require 'helpers'
 Backbone = require 'backbone4000'    
+_ = require 'underscore'
 
 # exposes a collection via HTTP (express)
 CollectionExposerHttp = exports.CollectionExposerHttp = Backbone.Model.extend4000
@@ -17,8 +18,13 @@ CollectionExposerHttp = exports.CollectionExposerHttp = Backbone.Model.extend400
         app.post helpers.makePath(path, name, 'remove'), (req,res) => c.remove req.body.pattern, callbackToRes(res)
         app.post helpers.makePath(path, name, 'update'), (req,res) => c.update req.body.pattern, req.body.data, callbackToRes(res)
         
-        app.post helpers.makePath(path, name, 'find'), (req,res) => c.findModels req.body.pattern, req.body.limits, (model) -> 
-            if model then res.write JSON.stringify(model.attributes) else res.end()
+        app.post helpers.makePath(path, name, 'find'), (req,res) =>
+            reslist = []
+            c.find req.body.pattern, req.body.limits, (err,data) ->
+                if data
+                    reslist.push(data)
+                else 
+                    res.end JSON.stringify(reslist)
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findModel req.body.pattern, (err,model) ->
             res.end JSON.stringify(err: err, data: model.attributes)

@@ -25,12 +25,17 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         undefined
             
     find: (pattern={},limits={},callback) ->
-        post helpers.makePath(@get('path'), 'find'), { pattern: pattern, limits: limits }, (err,res) -> if not err then callback undefined, res else callback err, res
+        post helpers.makePath(@get('path'), 'find'), { pattern: pattern, limits: limits }, (err,res) ->
+            if err then callback err, undefined
+            _.map res, (element) -> callback undefined, element
+            
         undefined
 
     findOne: (pattern={},callback) ->
         post helpers.makePath(@get('path'), 'findOne'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
+        
+    subscribeModel: -> true
 
 
 ###                

@@ -59,11 +59,12 @@
         pattern: pattern,
         limits: limits
       }, function(err, res) {
-        if (!err) {
-          return callback(void 0, res);
-        } else {
-          return callback(err, res);
+        if (err) {
+          callback(err, void 0);
         }
+        return _.map(res, function(element) {
+          return callback(void 0, element);
+        });
       });
       return void 0;
     },
@@ -81,6 +82,9 @@
         }
       });
       return void 0;
+    },
+    subscribeModel: function() {
+      return true;
     }
   });
 
