@@ -21,6 +21,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         undefined
 
     remove: (pattern,callback) ->
+        console.log "REMOVE CAL"
         post helpers.makePath(@get('path'), 'remove'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
             
@@ -34,9 +35,12 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
     findOne: (pattern={},callback) ->
         post helpers.makePath(@get('path'), 'findOne'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
-        
-    subscribeModel: -> true
 
+    update: (pattern,data,callback) ->
+        post helpers.makePath(@get('path'), 'update'), { pattern: pattern, data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        undefined
+                        
+    subscribeModel: -> true
 
 ###                
     _create: (entry,callback) -> core.msgCallback @send( collection: @get('name'), create: entry ), callback

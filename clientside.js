@@ -37,6 +37,7 @@
       return void 0;
     },
     remove: function(pattern, callback) {
+      console.log("REMOVE CAL");
       post(helpers.makePath(this.get('path'), 'remove'), {
         pattern: pattern
       }, function(err, res) {
@@ -74,6 +75,19 @@
       }
       post(helpers.makePath(this.get('path'), 'findOne'), {
         pattern: pattern
+      }, function(err, res) {
+        if (!err) {
+          return callback(res.err, res.data);
+        } else {
+          return callback(err, res);
+        }
+      });
+      return void 0;
+    },
+    update: function(pattern, data, callback) {
+      post(helpers.makePath(this.get('path'), 'update'), {
+        pattern: pattern,
+        data: data
       }, function(err, res) {
         if (!err) {
           return callback(res.err, res.data);

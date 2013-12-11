@@ -49,7 +49,7 @@
         return c.findModel(req.body.pattern, function(err, model) {
           return res.end(JSON.stringify({
             err: err,
-            data: model.attributes
+            data: model != null ? model.attributes : void 0
           }));
         });
       });

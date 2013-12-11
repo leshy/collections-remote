@@ -27,7 +27,8 @@ CollectionExposerHttp = exports.CollectionExposerHttp = Backbone.Model.extend400
                     res.end JSON.stringify(reslist)
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findModel req.body.pattern, (err,model) ->
-            res.end JSON.stringify(err: err, data: model.attributes)
+            res.end JSON.stringify(err: err, data: model?.attributes)
 
         app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) ->
             res.end JSON.stringify err: err, data: data
+
