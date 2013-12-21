@@ -37,7 +37,6 @@
       return void 0;
     },
     remove: function(pattern, callback) {
-      console.log("REMOVE CAL");
       post(helpers.makePath(this.get('path'), 'remove'), {
         pattern: pattern
       }, function(err, res) {

@@ -21,7 +21,6 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         undefined
 
     remove: (pattern,callback) ->
-        console.log "REMOVE CAL"
         post helpers.makePath(@get('path'), 'remove'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
             
