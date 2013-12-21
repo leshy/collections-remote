@@ -41,7 +41,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         undefined
                         
     subscribeModel: -> true
-
+    unsubscribe: -> true    
 ###                
     _create: (entry,callback) -> core.msgCallback @send( collection: @get('name'), create: entry ), callback
     

@@ -99,6 +99,9 @@
     },
     subscribeModel: function() {
       return true;
+    },
+    unsubscribe: function() {
+      return true;
     }
   });
 

@@ -10,9 +10,7 @@ CollectionExposerHttp = exports.CollectionExposerHttp = Backbone.Model.extend400
         c = @get 'collection'
         name = c.get 'name'
 
-        callbackToRes = (res) -> (err,data) ->
-            console.log 'res',err,data
-            res.end JSON.stringify err: err, data: data
+        callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
 
         app.post helpers.makePath(path, name, 'create'), (req,res) -> c.create req.body.data, callbackToRes(res)
         app.post helpers.makePath(path, name, 'remove'), (req,res) => c.remove req.body.pattern, callbackToRes(res)

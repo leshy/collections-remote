@@ -18,7 +18,6 @@
       name = c.get('name');
       callbackToRes = function(res) {
         return function(err, data) {
-          console.log('res', err, data);
           return res.end(JSON.stringify({
             err: err,
             data: data
