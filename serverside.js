@@ -110,11 +110,13 @@
         });
       });
       app.post(helpers.makePath(path, name, 'findOne'), function(req, res) {
-        return c.findOne(req.body.pattern, function(err, data) {
-          return res.end(JSON.stringify({
-            err: err,
-            data: data
-          }));
+        return c.findModel(req.body.pattern, function(err, model) {
+          return model.render(req, function(err, data) {
+            return res.end(JSON.stringify({
+              err: err,
+              data: data
+            }));
+          });
         });
       });
       return app.post(helpers.makePath(path, name, 'call'), function(req, res) {
