@@ -25,7 +25,7 @@
 
   RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000(collections.ModelMixin, collections.ReferenceMixin, {
     create: function(data, callback) {
-      post(helpers.makePath(this.get('path'), 'create'), {
+      post(helpers.makePath(this.get('path') + this.get('name'), 'create'), {
         data: data
       }, function(err, res) {
         if (!err) {
@@ -37,7 +37,7 @@
       return void 0;
     },
     remove: function(pattern, callback) {
-      post(helpers.makePath(this.get('path'), 'remove'), {
+      post(helpers.makePath(this.get('path') + this.get('name'), 'remove'), {
         pattern: pattern
       }, function(err, res) {
         if (!err) {
@@ -48,23 +48,26 @@
       });
       return void 0;
     },
-    find: function(pattern, limits, callback) {
+    find: function(pattern, limits, callback, callbackend) {
       if (pattern == null) {
         pattern = {};
       }
       if (limits == null) {
         limits = {};
       }
-      post(helpers.makePath(this.get('path'), 'find'), {
+      post(helpers.makePath(this.get('path') + this.get('name'), 'find'), {
         pattern: pattern,
         limits: limits
       }, function(err, res) {
         if (err) {
           callback(err, void 0);
         }
-        return _.map(res, function(element) {
+        _.map(res, function(element) {
           return callback(void 0, element);
         });
+        if (callbackend) {
+          return callbackend();
+        }
       });
       return void 0;
     },
@@ -72,7 +75,7 @@
       if (pattern == null) {
         pattern = {};
       }
-      post(helpers.makePath(this.get('path'), 'findOne'), {
+      post(helpers.makePath(this.get('path') + this.get('name'), 'findOne'), {
         pattern: pattern
       }, function(err, res) {
         if (!err) {
@@ -84,7 +87,7 @@
       return void 0;
     },
     update: function(pattern, data, callback) {
-      post(helpers.makePath(this.get('path'), 'update'), {
+      post(helpers.makePath(this.get('path') + this.get('name'), 'update'), {
         pattern: pattern,
         data: data
       }, function(err, res) {

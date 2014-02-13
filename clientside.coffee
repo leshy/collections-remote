@@ -17,30 +17,32 @@ post = (url,data,callback) ->
 RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collections.ReferenceMixin,
 
     create: (data,callback) ->
-        post helpers.makePath(@get('path'), 'create'), { data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post helpers.makePath(@get('path') + @get('name'), 'create'), { data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
 
     remove: (pattern,callback) ->
-        post helpers.makePath(@get('path'), 'remove'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post helpers.makePath(@get('path') + @get('name'), 'remove'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
             
-    find: (pattern={},limits={},callback) ->
-        post helpers.makePath(@get('path'), 'find'), { pattern: pattern, limits: limits }, (err,res) ->
+    find: (pattern={},limits={},callback,callbackend) ->
+        post helpers.makePath(@get('path') + @get('name'), 'find'), { pattern: pattern, limits: limits }, (err,res) ->
             if err then callback err, undefined
             _.map res, (element) -> callback undefined, element
+            if callbackend then callbackend()
             
         undefined
 
     findOne: (pattern={},callback) ->
-        post helpers.makePath(@get('path'), 'findOne'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post helpers.makePath(@get('path') + @get('name'), 'findOne'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
 
     update: (pattern,data,callback) ->
-        post helpers.makePath(@get('path'), 'update'), { pattern: pattern, data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post helpers.makePath(@get('path') + @get('name'), 'update'), { pattern: pattern, data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
                         
     subscribeModel: -> true
     unsubscribe: -> true    
+
 ###                
     _create: (entry,callback) -> core.msgCallback @send( collection: @get('name'), create: entry ), callback
     
