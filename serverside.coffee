@@ -67,3 +67,4 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model
         app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) ->
             res.end JSON.stringify err: err, data: data
 
+
