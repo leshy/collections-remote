@@ -93,6 +93,7 @@
       app.post(helpers.makePath(path, name, 'find'), function(req, res) {
         var reslist;
         reslist = [];
+        console.log("FINDMODELS", req.body.pattern, req.body.limits);
         return c.findModels(req.body.pattern, req.body.limits, function(err, model) {
           var flist;
           if (model) {
@@ -110,6 +111,7 @@
         });
       });
       app.post(helpers.makePath(path, name, 'findOne'), function(req, res) {
+        console.log("FINDMODEL", req.body.pattern);
         return c.findModel(req.body.pattern, function(err, model) {
           return model.render(req, function(err, data) {
             return res.end(JSON.stringify({
