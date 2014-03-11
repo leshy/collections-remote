@@ -23,7 +23,7 @@
     });
   };
 
-  RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000(collections.ModelMixin, collections.ReferenceMixin, {
+  RemoteCollectionHttp = Backbone.Model.extend4000(collections.ModelMixin, collections.ReferenceMixin, {
     create: function(data, callback) {
       post(helpers.makePath(this.get('path') + this.get('name'), 'create'), {
         data: data
@@ -104,5 +104,7 @@
       return true;
     }
   });
+
+  RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000(collections.RequestIdMixin, collections.CachingMixin);
 
 }).call(this);

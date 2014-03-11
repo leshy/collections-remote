@@ -14,7 +14,7 @@ post = (url,data,callback) ->
         error: (xhr,status,err) -> callback status
 
 # has the same interface as local collections but it transparently talks to the remote collectionExposer via http
-RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collections.ReferenceMixin,
+RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collections.ReferenceMixin,
 
     create: (data,callback) ->
         post helpers.makePath(@get('path') + @get('name'), 'create'), { data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
@@ -42,3 +42,6 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
                         
     subscribeModel: -> true
     unsubscribe: -> true    
+
+
+RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000 collections.RequestIdMixin, collections.CachingMixin
