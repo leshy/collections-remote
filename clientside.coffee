@@ -28,7 +28,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         post helpers.makePath(@get('path') + @get('name'), 'find'), { pattern: pattern, limits: limits }, (err,res) ->
             if err then callback err, undefined
             _.map res, (element) -> callback undefined, element
-            if callbackDone then callbackDone()
+            helpers.cbc callbackDone
             
         undefined
 

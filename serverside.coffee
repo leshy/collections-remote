@@ -45,16 +45,15 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model
         
         app.post helpers.makePath(path, name, 'find'), (req,res) =>
             reslist = []
-            c.findModels req.body.pattern, req.body.limits, (err,model) ->
-                if model
-                    reslist.push(model)
-                else
+            c.findModels(req.body.pattern, req.body.limits,
+                (err,model) -> reslist.push(model)
+                () -> 
                     flist = _.map reslist, (model) ->
                         (callback) -> model.render req, callback
                         
                     async.parallel flist, (err,data) ->
                         res.end JSON.stringify(data)
-
+                )
 #        app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findOne req.body.pattern, (err,data) ->
 #            res.end JSON.stringify(err: err, data: data)
 

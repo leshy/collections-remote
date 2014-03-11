@@ -65,9 +65,7 @@
         _.map(res, function(element) {
           return callback(void 0, element);
         });
-        if (callbackDone) {
-          return callbackDone();
-        }
+        return helpers.cbc(callbackDone);
       });
       return void 0;
     },

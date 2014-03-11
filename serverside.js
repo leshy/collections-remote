@@ -92,19 +92,17 @@
         var reslist;
         reslist = [];
         return c.findModels(req.body.pattern, req.body.limits, function(err, model) {
+          return reslist.push(model);
+        }, function() {
           var flist;
-          if (model) {
-            return reslist.push(model);
-          } else {
-            flist = _.map(reslist, function(model) {
-              return function(callback) {
-                return model.render(req, callback);
-              };
-            });
-            return async.parallel(flist, function(err, data) {
-              return res.end(JSON.stringify(data));
-            });
-          }
+          flist = _.map(reslist, function(model) {
+            return function(callback) {
+              return model.render(req, callback);
+            };
+          });
+          return async.parallel(flist, function(err, data) {
+            return res.end(JSON.stringify(data));
+          });
         });
       });
       app.post(helpers.makePath(path, name, 'findOne'), function(req, res) {
