@@ -48,7 +48,7 @@
       });
       return void 0;
     },
-    find: function(pattern, limits, callback, callbackend) {
+    find: function(pattern, limits, callback, callbackDone) {
       if (pattern == null) {
         pattern = {};
       }
@@ -65,8 +65,8 @@
         _.map(res, function(element) {
           return callback(void 0, element);
         });
-        if (callbackend) {
-          return callbackend();
+        if (callbackDone) {
+          return callbackDone();
         }
       });
       return void 0;

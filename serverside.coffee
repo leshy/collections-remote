@@ -19,11 +19,9 @@ CollectionExposerHttpRaw = exports.CollectionExposerHttpRaw = Backbone.Model.ext
         
         app.post helpers.makePath(path, name, 'find'), (req,res) =>
             reslist = []
-            c.find req.body.pattern, req.body.limits, (err,data) ->
-                if data
-                    reslist.push(data)
-                else 
-                    res.end JSON.stringify(reslist)
+            c.find( req.body.pattern, req.body.limits,
+                (err,data) -> reslist.push(data)
+                () -> res.end JSON.stringify(reslist) )
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findOne req.body.pattern, (err,data) ->
             res.end JSON.stringify(err: err, data: data)
@@ -47,7 +45,6 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model
         
         app.post helpers.makePath(path, name, 'find'), (req,res) =>
             reslist = []
-            console.log "FINDMODELS",req.body.pattern, req.body.limits
             c.findModels req.body.pattern, req.body.limits, (err,model) ->
                 if model
                     reslist.push(model)
@@ -62,7 +59,6 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model
 #            res.end JSON.stringify(err: err, data: data)
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) =>
-            console.log "FINDMODEL",req.body.pattern
             c.findModel req.body.pattern, (err,model) ->
                 model.render req, (err,data) -> res.end JSON.stringify err: err, data: data
 
