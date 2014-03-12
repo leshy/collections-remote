@@ -107,6 +107,12 @@
       });
       app.post(helpers.makePath(path, name, 'findOne'), function(req, res) {
         return c.findModel(req.body.pattern, function(err, model) {
+          if (err || !model) {
+            return res.end(JSON.stringify({
+              err: err,
+              data: model
+            }));
+          }
           return model.render(req, function(err, data) {
             return res.end(JSON.stringify({
               err: err,

@@ -59,6 +59,7 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) =>
             c.findModel req.body.pattern, (err,model) ->
+                if err or not model then return res.end JSON.stringify err: err, data: model
                 model.render req, (err,data) -> res.end JSON.stringify err: err, data: data
 
         app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) ->
