@@ -80,13 +80,13 @@
         };
       };
       app.post(helpers.makePath(path, name, 'create'), function(req, res) {
-        return c.create(req.body.data, callbackToRes(res));
+        return c.createModel(req.body.data, callbackToRes(res));
       });
       app.post(helpers.makePath(path, name, 'remove'), function(req, res) {
-        return c.remove(req.body.pattern, callbackToRes(res));
+        return c.removeModel(req.body.pattern, callbackToRes(res));
       });
       app.post(helpers.makePath(path, name, 'update'), function(req, res) {
-        return c.update(req.body.pattern, req.body.data, callbackToRes(res));
+        return c.updateModel(req.body.pattern, req.body.data, callbackToRes(res));
       });
       app.post(helpers.makePath(path, name, 'find'), function(req, res) {
         var reslist;

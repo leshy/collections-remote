@@ -40,8 +40,5 @@ RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collect
         post helpers.makePath(@get('path') + @get('name'), 'update'), { pattern: pattern, data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
                         
-    subscribeModel: -> true
-    unsubscribe: -> true    
-
 
 RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000 collections.RequestIdMixin, collections.CachingMixin

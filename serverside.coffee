@@ -39,9 +39,9 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model
 
         callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
 
-        app.post helpers.makePath(path, name, 'create'), (req,res) -> c.create req.body.data, callbackToRes(res)
-        app.post helpers.makePath(path, name, 'remove'), (req,res) => c.remove req.body.pattern, callbackToRes(res)
-        app.post helpers.makePath(path, name, 'update'), (req,res) => c.update req.body.pattern, req.body.data, callbackToRes(res)
+        app.post helpers.makePath(path, name, 'create'), (req,res) -> c.createModel req.body.data, callbackToRes(res)
+        app.post helpers.makePath(path, name, 'remove'), (req,res) => c.removeModel req.body.pattern, callbackToRes(res)
+        app.post helpers.makePath(path, name, 'update'), (req,res) => c.updateModel req.body.pattern, req.body.data, callbackToRes(res)
         
         app.post helpers.makePath(path, name, 'find'), (req,res) =>
             reslist = []
