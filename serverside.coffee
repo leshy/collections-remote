@@ -4,9 +4,12 @@ _ = require 'underscore'
 async = require 'async'
 Validator = require 'validator2-extras'; v = Validator.v; Select = Validator.Select
 
-callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
+callbackToRes = (res) -> (err,data) ->
+    console.log err?.constructor
+    if err.name then err = err.name
+    res.end JSON.stringify err: err, data: data
+    
 errDataToRes = (res,err,data) ->
-    console.log "RES END", err,data
     res.end JSON.stringify( err: err, data: data )
 
 # exposes a collection via HTTP (express)
@@ -57,8 +60,6 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
         getRealm = (req, callback) ->
             if realm.constructor isnt Function then return callback null, realm
             realm req, callback
-
-        callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
         
         app.post helpers.makePath(path, name, 'create'), (req,res) -> c.createModel req.body.data, callbackToRes(res)
         

@@ -18,6 +18,10 @@
 
   callbackToRes = function(res) {
     return function(err, data) {
+      console.log(err != null ? err.constructor : void 0);
+      if (err.name) {
+        err = err.name;
+      }
       return res.end(JSON.stringify({
         err: err,
         data: data
@@ -26,7 +30,6 @@
   };
 
   errDataToRes = function(res, err, data) {
-    console.log("RES END", err, data);
     return res.end(JSON.stringify({
       err: err,
       data: data
@@ -97,14 +100,6 @@
           return callback(null, realm);
         }
         return realm(req, callback);
-      };
-      callbackToRes = function(res) {
-        return function(err, data) {
-          return res.end(JSON.stringify({
-            err: err,
-            data: data
-          }));
-        };
       };
       app.post(helpers.makePath(path, name, 'create'), function(req, res) {
         return c.createModel(req.body.data, callbackToRes(res));
