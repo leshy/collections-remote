@@ -2,16 +2,26 @@ helpers = require 'helpers'
 Backbone = require 'backbone4000'    
 _ = require 'underscore'
 async = require 'async'
+Validator = require 'validator2-extras'; v = Validator.v; Select = Validator.Select
+
+callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
+errDataToRes = (res,err,data) ->
+    console.log "RES END", err,data
+    res.end JSON.stringify( err: err, data: data )
 
 # exposes a collection via HTTP (express)
-CollectionExposerHttpRaw = exports.CollectionExposerHttpRaw = Backbone.Model.extend4000
+CollectionExposerHttpRaw = exports.CollectionExposerHttpRaw = Validator.ValidatedModel.extend4000
+    validator:
+        path: 'String',
+        app: 'Function',
+        collection: 'Instance'
+
     initialize: ->       
         path = @get 'path'
         app = @get 'app'
         c = @get 'collection'
         name = c.get 'name'
 
-        callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
 
         app.post helpers.makePath(path, name, 'create'), (req,res) -> c.create req.body.data, callbackToRes(res)
         app.post helpers.makePath(path, name, 'remove'), (req,res) => c.remove req.body.pattern, callbackToRes(res)
@@ -24,25 +34,43 @@ CollectionExposerHttpRaw = exports.CollectionExposerHttpRaw = Backbone.Model.ext
                 () -> res.end JSON.stringify(reslist) )
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findOne req.body.pattern, (err,data) ->
-            res.end JSON.stringify(err: err, data: data)
+            errDataToRes res, err, data
 
         app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) ->
-            res.end JSON.stringify err: err, data: data
+            errDataToRes res, err, data
 
 
-CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Backbone.Model.extend4000
-    initialize: ->       
+CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.ValidatedModel.extend4000
+    validator:
+        path: 'String',
+        app: 'Function',
+        collection: 'Instance'
+        realm: v().or('Object', 'String', 'Function')
+        
+    initialize: ->
         path = @get 'path'
         app = @get 'app'
         c = @get 'collection'
         name = c.get 'name'
+        realm = @get 'realm'
+
+        getRealm = (req, callback) ->
+            if realm.constructor isnt Function then return callback null, realm
+            realm req, callback
 
         callbackToRes = (res) -> (err,data) -> res.end JSON.stringify err: err, data: data
-
-        app.post helpers.makePath(path, name, 'create'), (req,res) -> c.createModel req.body.data, callbackToRes(res)
-        app.post helpers.makePath(path, name, 'remove'), (req,res) => c.removeModel req.body.pattern, callbackToRes(res)
-        app.post helpers.makePath(path, name, 'update'), (req,res) => c.updateModel req.body.pattern, req.body.data, callbackToRes(res)
         
+        app.post helpers.makePath(path, name, 'create'), (req,res) -> c.createModel req.body.data, callbackToRes(res)
+        
+        app.post helpers.makePath(path, name, 'remove'), (req,res) => c.removeModel req.body.pattern, callbackToRes(res)
+        
+        app.post helpers.makePath(path, name, 'update'), (req,res) =>
+            getRealm req, (err, realm) ->
+                console.log "got realm",err,realm
+                if err then return res.end JSON.stringify err: err, data: data
+
+                c.updateModel req.body.pattern, req.body.data, realm, (err,data) -> errDataToRes res,err,data
+                    
         app.post helpers.makePath(path, name, 'find'), (req,res) =>
             reslist = []
             c.findModels(req.body.pattern, req.body.limits,
