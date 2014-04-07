@@ -1,0 +1,19 @@
+{
+  "name": "collections-remote",
+  "version": "0.0.0",
+  "description": "",
+  "main": "serverside.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/leshy/collections-remote.git"
+  },
+  "author": "lesh@sysphere.org",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leshy/collections-remote/issues"
+  },
+  "homepage": "https://github.com/leshy/collections-remote"
+}
