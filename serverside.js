@@ -19,9 +19,6 @@
   callbackToRes = function(res) {
     return function(err, data) {
       console.log(err != null ? err.constructor : void 0);
-      if (err.name) {
-        err = err.name;
-      }
       return res.end(JSON.stringify({
         err: err,
         data: data
