@@ -2,8 +2,9 @@ Backbone = require 'backbone4000'
 collections = require 'collections'
 helpers = require 'helpers'
 
-if exports    
-    request = require 'request'
+if exports
+    req = 'request'
+    request = require req
     post = (url,data,callback) ->
         options =  {
             url: url
