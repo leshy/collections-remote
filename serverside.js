@@ -111,7 +111,6 @@
       });
       app.post(helpers.makePath(path, name, 'update'), function(req, res) {
         return getRealm(req, function(err, realm) {
-          console.log("got realm", err, realm);
           if (err) {
             return res.end(JSON.stringify({
               err: err,

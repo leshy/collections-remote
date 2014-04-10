@@ -2,7 +2,7 @@ Backbone = require 'backbone4000'
 collections = require 'collections'
 helpers = require 'helpers'
 
-if exports
+if exports    
     request = require 'request'
     post = (url,data,callback) ->
         options =  {
@@ -10,12 +10,11 @@ if exports
             method: "POST"
             json: data
         }
-        console.log options
-        request options, (err,req,data) ->
-            callback err,data
-            
         
-else    
+        request options, (err,req,data) -> callback err,data
+                
+else
+
     post = (url,data,callback) ->
         $.ajax url,
             type: "POST",
@@ -26,14 +25,15 @@ else
             error: (xhr,status,err) -> callback status
 
 # has the same interface as local collections but it transparently talks to the remote collectionExposer via http
-RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collections.ReferenceMixin,
+RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collections.ReferenceMixin, collections.RequestIdMixin, collections.CachingMixin,
 
     getpath: (query) ->
         path = helpers.makePath(@get('path') + @get('name'), query)
         if not host = @get('host') then path else host + path
         
     create: (data,callback) ->
-        post @getpath('create'), { data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post @getpath('create'), { data: data }, (err,res) ->
+            if not err then callback res.err, res.data else callback err, res
         undefined
 
     remove: (pattern,callback) ->
@@ -56,5 +56,3 @@ RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collect
         post @getpath('update'), { pattern: pattern, data: data }, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
                         
-
-RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000 collections.RequestIdMixin, collections.CachingMixin

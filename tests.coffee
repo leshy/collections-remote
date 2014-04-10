@@ -24,6 +24,10 @@ exports.initHttp = (test) ->
         env.server = http.createServer env.app
         env.server.listen 8010
 
+
+    app.get '*', (req,res,next) ->
+        console.log req
+        next()
     
     test.done()
 
@@ -31,19 +35,24 @@ exports.initDb = (test) ->
     env.db = new mongodb.Db 'test', new mongodb.Server('localhost', 27017), safe: true
     env.db.open ->
         env.collection = new collections.MongoCollection db: env.db, collection: 'testc'
+
+        env.smodel = env.collection.defineModel 'testmodel',
+            initialize: ->
+                @subscribe 'create', (data,callback) ->
+                    callback null, {x: 'sub change'}
+
+            
         test.done()
 
 exports.initServer = (test) ->
     getRealm = (req, callback) ->
-        callback null, { admin: true }    
-
-    env.smodel = env.collection.defineModel 'testmodel', {}
-    
+        callback null, { admin: true }
+                        
     env.scol = new rs.CollectionExposerHttpFancy collection: env.collection, app: env.app, realm: getRealm, path: '/api/v1/'
-
 
     test.done()
     
+
 exports.initClient = (test) ->
     env.ccol = new rc.RemoteCollectionHttp host: "http://localhost:8010", path: "/api/v1/", name: 'testc', timeout: 1000
     env.cmodel = env.ccol.defineModel 'testmodel', {}
@@ -52,8 +61,15 @@ exports.initClient = (test) ->
 exports.create = (test) ->
     x = new env.cmodel bla: 1
     x.flush (err,data) ->
-        console.log err,data
-        test.done()
+        if not x.attributes.id then test.fail 'no id'
+        if not x.attributes.x then test.fail 'no sub change'
+        if not x.attributes.bla then test.fail 'no local change'
+        x.remove (err,data) ->
+            expected = {}
+            expected[x.attributes.id] = 1
+            test.deepEqual data, expected
+            test.done()
+
 
 
 exports.unload = (test)->

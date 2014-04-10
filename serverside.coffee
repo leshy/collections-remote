@@ -25,7 +25,6 @@ CollectionExposerHttpRaw = exports.CollectionExposerHttpRaw = Validator.Validate
         c = @get 'collection'
         name = c.get 'name'
 
-
         app.post helpers.makePath(path, name, 'create'), (req,res) -> c.create req.body.data, callbackToRes(res)
         app.post helpers.makePath(path, name, 'remove'), (req,res) => c.remove req.body.pattern, callbackToRes(res)
         app.post helpers.makePath(path, name, 'update'), (req,res) => c.update req.body.pattern, req.body.data, callbackToRes(res)
@@ -61,13 +60,14 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
             if realm.constructor isnt Function then return callback null, realm
             realm req, callback
         
-        app.post helpers.makePath(path, name, 'create'), (req,res) -> c.createModel req.body.data, callbackToRes(res)
+        app.post helpers.makePath(path, name, 'create'), (req,res) -> 
+            c.createModel req.body.data, callbackToRes(res)
         
-        app.post helpers.makePath(path, name, 'remove'), (req,res) => c.removeModel req.body.pattern, callbackToRes(res)
+        app.post helpers.makePath(path, name, 'remove'), (req,res) -> 
+            c.removeModel req.body.pattern, callbackToRes(res)
         
         app.post helpers.makePath(path, name, 'update'), (req,res) =>
             getRealm req, (err, realm) ->
-                console.log "got realm",err,realm
                 if err then return res.end JSON.stringify err: err, data: data
 
                 c.updateModel req.body.pattern, req.body.data, realm, (err,data) -> errDataToRes res,err,data

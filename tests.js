@@ -39,6 +39,10 @@
       env.server = http.createServer(env.app);
       return env.server.listen(8010);
     });
+    app.get('*', function(req, res, next) {
+      console.log(req);
+      return next();
+    });
     return test.done();
   };
 
@@ -51,6 +55,15 @@
         db: env.db,
         collection: 'testc'
       });
+      env.smodel = env.collection.defineModel('testmodel', {
+        initialize: function() {
+          return this.subscribe('create', function(data, callback) {
+            return callback(null, {
+              x: 'sub change'
+            });
+          });
+        }
+      });
       return test.done();
     });
   };
@@ -62,7 +75,6 @@
         admin: true
       });
     };
-    env.smodel = env.collection.defineModel('testmodel', {});
     env.scol = new rs.CollectionExposerHttpFancy({
       collection: env.collection,
       app: env.app,
@@ -89,8 +101,22 @@
       bla: 1
     });
     return x.flush(function(err, data) {
-      console.log(err, data);
-      return test.done();
+      if (!x.attributes.id) {
+        test.fail('no id');
+      }
+      if (!x.attributes.x) {
+        test.fail('no sub change');
+      }
+      if (!x.attributes.bla) {
+        test.fail('no local change');
+      }
+      return x.remove(function(err, data) {
+        var expected;
+        expected = {};
+        expected[x.attributes.id] = 1;
+        test.deepEqual(data, expected);
+        return test.done();
+      });
     });
   };
 
