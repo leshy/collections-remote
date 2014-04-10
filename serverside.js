@@ -18,7 +18,9 @@
 
   callbackToRes = function(res) {
     return function(err, data) {
-      console.log(err != null ? err.constructor : void 0);
+      if (err != null ? err.name : void 0) {
+        err = err.name;
+      }
       return res.end(JSON.stringify({
         err: err,
         data: data
@@ -27,6 +29,9 @@
   };
 
   errDataToRes = function(res, err, data) {
+    if (err != null ? err.name : void 0) {
+      err = err.name;
+    }
     return res.end(JSON.stringify({
       err: err,
       data: data
@@ -119,15 +124,19 @@
         });
       });
       app.post(helpers.makePath(path, name, 'find'), function(req, res) {
-        var reslist;
+        var reslist, verbose;
         reslist = [];
+        verbose = false;
+        if (req.body.pattern['owner._r']) {
+          verbose = true;
+        }
         return c.findModels(req.body.pattern, req.body.limits, function(err, model) {
           return reslist.push(model);
         }, function() {
           var flist;
           flist = _.map(reslist, function(model) {
             return function(callback) {
-              return model.render(req, callback);
+              return model.render(req, callback, verbose);
             };
           });
           return async.parallel(flist, function(err, data) {
