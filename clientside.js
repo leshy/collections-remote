@@ -8,7 +8,7 @@
 
   helpers = require('helpers');
 
-  if (exports) {
+  if (!window) {
     req = 'request';
     request = require(req);
     post = function(url, data, callback) {
@@ -39,7 +39,7 @@
     };
   }
 
-  RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000(collections.ModelMixin, collections.ReferenceMixin, collections.RequestIdMixin, collections.CachingMixin, {
+  RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000(collections.ModelMixin, collections.ReferenceMixin, {
     getpath: function(query) {
       var host, path;
       path = helpers.makePath(this.get('path') + this.get('name'), query);
@@ -123,5 +123,7 @@
       return void 0;
     }
   });
+
+  RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000(collections.RequestIdMixin, collections.CachingMixin);
 
 }).call(this);
