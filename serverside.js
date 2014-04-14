@@ -104,7 +104,11 @@
         return realm(req, callback);
       };
       app.post(helpers.makePath(path, name, 'create'), function(req, res) {
-        return c.createModel(req.body.data, callbackToRes(res));
+        return getRealm(req, function(err, realm) {
+          return c.createModel(req.body.data, realm, function(err, data) {
+            return callbackToRes(res)(err, data);
+          });
+        });
       });
       app.post(helpers.makePath(path, name, 'remove'), function(req, res) {
         return c.removeModel(req.body.pattern, callbackToRes(res));

@@ -60,9 +60,11 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
             if realm.constructor isnt Function then return callback null, realm
             realm req, callback
         
-        app.post helpers.makePath(path, name, 'create'), (req,res) -> 
-            c.createModel req.body.data, callbackToRes(res)
-        
+        app.post helpers.makePath(path, name, 'create'), (req,res) ->
+            getRealm req, (err, realm) ->
+                c.createModel req.body.data, realm, (err,data) ->
+                    callbackToRes(res)(err,data)
+                    
         app.post helpers.makePath(path, name, 'remove'), (req,res) -> 
             c.removeModel req.body.pattern, callbackToRes(res)
         
