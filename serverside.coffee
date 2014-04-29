@@ -92,6 +92,7 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
                     async.parallel flist, (err,data) ->
                         res.end JSON.stringify(data)
                 )
+
 #        app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findOne req.body.pattern, (err,data) ->
 #            res.end JSON.stringify(err: err, data: data)
 

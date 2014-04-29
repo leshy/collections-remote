@@ -39,7 +39,7 @@
     };
   }
 
-  RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000(collections.ModelMixin, collections.ReferenceMixin, {
+  RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000({
     getpath: function(query) {
       var host, path;
       path = helpers.makePath(this.get('path') + this.get('name'), query);
@@ -124,6 +124,6 @@
     }
   });
 
-  RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000(collections.RequestIdMixin, collections.CachingMixin);
+  RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000(collections.ReferenceMixin, collections.ModelMixin, collections.RequestIdMixin, collections.CachingMixin);
 
 }).call(this);

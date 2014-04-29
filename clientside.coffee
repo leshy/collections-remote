@@ -2,6 +2,7 @@ Backbone = require 'backbone4000'
 collections = require 'collections'
 helpers = require 'helpers'
 
+
 if not window
     req = 'request'
     request = require req
@@ -26,7 +27,7 @@ else
             error: (xhr,status,err) -> callback status
 
 # has the same interface as local collections but it transparently talks to the remote collectionExposer via http
-RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 collections.ModelMixin, collections.ReferenceMixin, 
+RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
 
     getpath: (query) ->
         path = helpers.makePath(@get('path') + @get('name'), query)
@@ -46,7 +47,6 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
             if err then callback err, undefined
             _.map res, (element) -> callback undefined, element
             helpers.cbc callbackDone
-            
         undefined
 
     findOne: (pattern={},callback) ->
@@ -58,4 +58,4 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
         undefined
 
 
-RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000 collections.RequestIdMixin, collections.CachingMixin # these mixings should hook find
+RemoteCollectionHttp = exports.RemoteCollectionHttp = RemoteCollectionHttp.extend4000 collections.ReferenceMixin, collections.ModelMixin, collections.RequestIdMixin, collections.CachingMixin # these mixings should hook find
