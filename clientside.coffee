@@ -46,7 +46,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000
         post @getpath('find'), { pattern: pattern, limits: limits }, (err,res) ->
             if err then callback err, undefined
             _.map res, (element) -> callback undefined, element
-            helpers.cbc callbackDone
+            helpers.cbc callbackDone err, true
         undefined
 
     findOne: (pattern={},callback) ->
