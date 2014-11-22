@@ -75,8 +75,7 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
                 c.updateModel req.body.pattern, req.body.data, realm, (err,data) -> errDataToRes res,err,data
                     
         app.post helpers.makePath(path, name, 'find'), (req,res) =>
-            reslist = []
-            
+            reslist = []            
             verbose = false
             
             if req.body.pattern['owner._r'] then verbose = true
@@ -90,11 +89,7 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
                             model.render req, callback,verbose
                         
                     async.parallel flist, (err,data) ->
-                        res.end JSON.stringify(data)
-                )
-
-#        app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findOne req.body.pattern, (err,data) ->
-#            res.end JSON.stringify(err: err, data: data)
+                        res.end JSON.stringify(data))
 
         app.post helpers.makePath(path, name, 'findOne'), (req,res) =>
             c.findModel req.body.pattern, (err,model) ->
