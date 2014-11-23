@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/leshy/collections-remote/issues"
   },
-  "homepage": "https://github.com/leshy/collections-remote"
+  "homepage": "https://github.com/leshy/collections-remote",
+  "dependencies": {
+    "underscore": "underscore >= 1.4.x",
+    "helpers": "git://github.com/leshy/nodejs-helpers.git",
+    "backbone4000": "git://github.com/leshy/backbone4000.git",
+    "async": "^0.9.0",
+    "validator2": "git://github.com/leshy/nodejs-validator2.git",
+    "validator2-extras": "git://github.com/leshy/nodejs-validator2-extras.git"
+  }
 }
