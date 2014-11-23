@@ -1,7 +1,7 @@
 {
   "name": "collections-remote",
   "version": "0.0.0",
-  "description": "",
+  "description": "abstraction layer between node-collections and concrete communication protocols",
   "main": "serverside.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
