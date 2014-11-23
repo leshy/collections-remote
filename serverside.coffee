@@ -25,12 +25,23 @@ CollectionExposerHttpRaw = exports.CollectionExposerHttpRaw = Validator.Validate
         c = @get 'collection'
         name = c.get 'name'
 
-        app.post helpers.makePath(path, name, 'create'), (req,res) -> c.create req.body.data, callbackToRes(res)
-        app.post helpers.makePath(path, name, 'remove'), (req,res) => c.remove req.body.pattern, callbackToRes(res)
-        app.post helpers.makePath(path, name, 'update'), (req,res) => c.update req.body.pattern, req.body.data, callbackToRes(res)        
-        app.post helpers.makePath(path, name, 'findOne'), (req,res) => c.findOne req.body.pattern, (err,data) -> errDataToRes res, err, data
-        app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) -> errDataToRes res, err, data
-        app.post helpers.makePath(path, name, 'find'), (req,res) =>
+        app.post helpers.makePath(path, name, 'create'), (req,res) ->
+            c.create req.body.data, callbackToRes(res)
+            
+        app.post helpers.makePath(path, name, 'remove'), (req,res) -> 
+            c.remove req.body.pattern, callbackToRes(res)
+            
+        app.post helpers.makePath(path, name, 'update'), (req,res) -> 
+            c.update req.body.pattern, req.body.data, callbackToRes(res)
+            
+        app.post helpers.makePath(path, name, 'findOne'), (req,res) -> 
+            c.findOne req.body.pattern, (err,data) -> errDataToRes res, err, data
+            
+        app.post helpers.makePath(path, name, 'call'), (req,res) ->
+            c.fcall req.body.function, req.body.args or [], req.body.pattern, undefined, (err,data) ->
+                errDataToRes res, err, data
+                
+        app.post helpers.makePath(path, name, 'find'), (req,res) -> 
             reslist = []
             c.find( req.body.pattern, req.body.limits,
                 (err,data) -> reslist.push(data)
@@ -94,6 +105,8 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
             res.end JSON.stringify err: err, data: data
 
 
+
+subscriptionMan = require('subscriptionman2')
 
                                     
 # inherit subscriptionman, check subsman2 and make sure it fits here..        
