@@ -8,7 +8,7 @@
 
   helpers = require('helpers');
 
-  if (!window) {
+  if (!global.window) {
     req = 'request';
     request = require(req);
     post = function(url, data, callback) {

@@ -3,7 +3,7 @@ collections = require 'collections'
 helpers = require 'helpers'
 
 
-if not window
+if not global.window
     req = 'request'
     request = require req
     post = (url,data,callback) ->
@@ -13,8 +13,7 @@ if not window
             json: data
         }
         
-        request options, (err,req,data) -> callback err,data
-                
+        request options, (err,req,data) -> callback err,data                
 else
 
     post = (url,data,callback) ->
