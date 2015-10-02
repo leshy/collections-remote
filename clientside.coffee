@@ -2,7 +2,6 @@ Backbone = require 'backbone4000'
 collections = require 'collections'
 helpers = require 'helpers'
 
-
 if not global.window
     req = 'request'
     request = require req
@@ -33,12 +32,12 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000
         if not host = @get('host') then path else host + path
         
     create: (data,callback) ->
-        post @getpath('create'), { data: data }, (err,res) ->
+        post @getpath('create'), data, (err,res) ->
             if not err then callback res.err, res.data else callback err, res
         undefined
 
     remove: (pattern,callback) ->
-        post @getpath('remove'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post @getpath('remove'), pattern, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
             
     find: (pattern={},limits={},callback,callbackDone) ->

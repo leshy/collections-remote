@@ -50,9 +50,7 @@
       }
     },
     create: function(data, callback) {
-      post(this.getpath('create'), {
-        data: data
-      }, function(err, res) {
+      post(this.getpath('create'), data, function(err, res) {
         if (!err) {
           return callback(res.err, res.data);
         } else {
@@ -62,9 +60,7 @@
       return void 0;
     },
     remove: function(pattern, callback) {
-      post(this.getpath('remove'), {
-        pattern: pattern
-      }, function(err, res) {
+      post(this.getpath('remove'), pattern, function(err, res) {
         if (!err) {
           return callback(res.err, res.data);
         } else {

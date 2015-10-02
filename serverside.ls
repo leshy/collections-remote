@@ -4,6 +4,8 @@ _ = require 'underscore'
 async = require 'async'
 Validator = require 'validator2-extras'; v = Validator.v; Select = Validator.Select
 
+subscriptionMan = require('subscriptionman2')
+
 callbackToRes = (res) -> (err,data) ->
   if err?.name then err = err.name
   res.end JSON.stringify err: err, data: data
@@ -66,50 +68,27 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
       else return realm req
     
     app.post helpers.makePath(path, name, 'create'), (req,res) ->
-      @applyPermission @permissions.create, msg, getRealm(req), (err,msg) ~>
-        if err then return callbackToRes(res)(err)
-          
-      getRealm req, (err, realm) ->
-        console.log 'createmodel!', req.body.data
-        c.createModel req.body.data, realm, (err,data) ->
-          console.log "GOT",err,data
-          if err then console.log err.stack
-          callbackToRes(res)(err,data)
-          
-    app.post helpers.makePath(path, name, 'remove'), (req,res) -> 
-      c.removeModel req.body.pattern, callbackToRes(res)
-    
-    app.post helpers.makePath(path, name, 'update'), (req,res) ~>
-      getRealm req, (err, realm) ->
-        if err then return res.end JSON.stringify err: err, data: data
-
-        c.updateModel req.body.pattern, req.body.data, realm, (err,data) -> errDataToRes res,err,data
+      c.rCreate getRealm(req), req.body, callbackToRes(res)
+      
+    app.post helpers.makePath(path, name, 'remove'), (req,res) ->
+      c.rRemove getRealm(req), req.body, callbackToRes(res)
+      
+    app.post helpers.makePath(path, name, 'update'), (req,res) ->
+      c.rUpdate getRealm(req), req.body, callbackToRes(res)
           
     app.post helpers.makePath(path, name, 'find'), (req,res) ~>
-      reslist = []      
-      verbose = false
-      c.findModels(req.body.pattern, req.body.limits,
-        (err,model) ->
-          reslist.push(model)
-        ->
-          flist = _.map reslist, (model) ->
-            (callback) ->
-              model.render req, callback, verbose
-            
-          async.parallel flist, (err,data) ->
-            res.end JSON.stringify(data))
+      reslist = []
+      c.rFind(req.body, ((err,model) -> reslist.push(model))
+        -> res.end JSON.stringify(reslist))
 
-    app.post helpers.makePath(path, name, 'findOne'), (req,res) ~>
-      c.findModel req.body.pattern, (err,model) ->
-        if err or not model then return res.end JSON.stringify err: err, data: model
-        model.render req, (err,data) -> res.end JSON.stringify err: err, data: data
+    app.post helpers.makePath(path, name, 'findOne'), (req,res) ->
+      c.rFindOne getRealm(req), req.body, callbackToRes(res)
+      
+    app.post helpers.makePath(path, name, 'call'), (req,res) ->
+      c.rCall getRealm(req), req.body, callbackToRes(res)
 
-    app.post helpers.makePath(path, name, 'call'), (req,res) -> c.fcall req.body.function, (req.body.args or []), req.body.pattern, undefined, (err,data) ->
-      res.end JSON.stringify err: err, data: data
+    
 
-
-
-subscriptionMan = require('subscriptionman2')
 
                   
 # inherit subscriptionman, check subsman2 and make sure it fits here..    
