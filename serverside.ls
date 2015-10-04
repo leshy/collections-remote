@@ -77,18 +77,17 @@ CollectionExposerHttpFancy = exports.CollectionExposerHttpFancy = Validator.Vali
       c.rUpdate getRealm(req), req.body, callbackToRes(res)
           
     app.post helpers.makePath(path, name, 'find'), (req,res) ~>
-      reslist = []
-      c.rFind(req.body, ((err,model) -> reslist.push(model))
-        -> res.end JSON.stringify(reslist))
+      res.write "["
+      first = true
+      c.rFind(getRealm(req), req.body, ((err,model) ~>
+        if not first then res.write ",\n" else first := false
+        res.write JSON.stringify(model)), -> res.end("]"))
 
     app.post helpers.makePath(path, name, 'findOne'), (req,res) ->
       c.rFindOne getRealm(req), req.body, callbackToRes(res)
       
     app.post helpers.makePath(path, name, 'call'), (req,res) ->
       c.rCall getRealm(req), req.body, callbackToRes(res)
-
-    
-
 
                   
 # inherit subscriptionman, check subsman2 and make sure it fits here..    

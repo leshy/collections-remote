@@ -36,7 +36,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000
             if not err then callback res.err, res.data else callback err, res
         undefined
 
-    remove: (pattern,callback) ->
+    remove: (pattern, callback) ->
         post @getpath('remove'), pattern, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
             
@@ -48,7 +48,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000
         undefined
 
     findOne: (pattern={},callback) ->
-        post @getpath('findOne'), { pattern: pattern }, (err,res) -> if not err then callback res.err, res.data else callback err, res
+        post @getpath('findOne'), pattern, (err,res) -> if not err then callback res.err, res.data else callback err, res
         undefined
 
     update: (pattern,data,callback) ->

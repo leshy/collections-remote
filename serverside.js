@@ -102,12 +102,18 @@
         return c.rUpdate(getRealm(req), req.body, callbackToRes(res));
       });
       app.post(helpers.makePath(path, name, 'find'), function(req, res){
-        var reslist;
-        reslist = [];
-        return c.rFind(req.body, function(err, model){
-          return reslist.push(model);
+        var first;
+        res.write("[");
+        first = true;
+        return c.rFind(getRealm(req), req.body, function(err, model){
+          if (!first) {
+            res.write(",\n");
+          } else {
+            first = false;
+          }
+          return res.write(JSON.stringify(model));
         }, function(){
-          return res.end(JSON.stringify(reslist));
+          return res.end("]");
         });
       });
       app.post(helpers.makePath(path, name, 'findOne'), function(req, res){

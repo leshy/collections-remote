@@ -94,9 +94,7 @@
       if (pattern == null) {
         pattern = {};
       }
-      post(this.getpath('findOne'), {
-        pattern: pattern
-      }, function(err, res) {
+      post(this.getpath('findOne'), pattern, function(err, res) {
         if (!err) {
           return callback(res.err, res.data);
         } else {
