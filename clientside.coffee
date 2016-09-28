@@ -17,13 +17,25 @@ if not global.window
 else
 
     post = (url,data,callback) ->
-        $.ajax url,
-            type: "POST",
-            contentType:"application/json; charset=utf-8",
-            dataType:"json",
-            data: JSON.stringify(data),
-            success: (data) -> callback undefined, data
-            error: (xhr,status,err) -> callback status
+        xhr = new XMLHttpRequest
+        #console.log "POST URL", url, JSON.stringify(data.pattern)
+        
+        xhr.open "POST", url        
+        xhr.setRequestHeader "Content-Type", "application/json;charset=UTF-8"
+
+        gotData = -> callback undefined, JSON.parse(xhr.responseText)
+        
+        gotErr = -> callback true
+        
+        gotProgress = (oEvent) ->
+          if (oEvent.lengthComputable)
+            percentComplete = oEvent.loaded / oEvent.total;
+            
+        xhr.addEventListener "load", gotData
+        xhr.addEventListener "error", gotErr
+        #xhr.addEventListener "progress", gotProgress
+        
+        xhr.send JSON.stringify(data)
 
 # has the same interface as local collections but it transparently talks to the remote collectionExposer via http
 RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000 
@@ -45,7 +57,7 @@ RemoteCollectionHttp = exports.RemoteCollectionHttp = Backbone.Model.extend4000
         post @getpath('find'), { pattern: pattern, limits: limits }, (err,res) ->
             if err then callback err, undefined
             _.map res, (element) -> callback undefined, element
-            helpers.cbc callbackDone err, true
+            helpers.cbc callbackDone, err, true
         undefined
 
     findOne: (pattern={},callback) ->
